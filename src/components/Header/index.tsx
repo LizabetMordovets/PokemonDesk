@@ -2,7 +2,7 @@ import React from 'react';
 
 import s from './Header.module.scss';
 
-import { ReactComponent as PokemonLogoSvg } from './assets/Logo.svg';
+import { ReactComponent as PokemonLogoSvg } from './assets/logo.svg';
 
 interface IMenu {
   id: number;
