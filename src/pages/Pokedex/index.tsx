@@ -1,42 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import Heading from '../../components/Heading';
 import Layout from '../../components/Layout';
 import PokemonCard from '../../components/PokemonCard';
+import useData from '../../hook/getData';
 import req from '../../utils/request';
 import s from './Pokedex.module.scss';
+import {IPokemons} from '../../interface/pokemons';
+import useDebounce from '../../hook/useDebounce';
 
-const usePokemons = () => {
-  const [data, setData] = useState([]);
-  const [isLoading, setIsloading] = useState<boolean>(true);
-  const [isError, setIsError] = useState<boolean>(false);
-
-  useEffect(() => {
-    const getPokemons = async () => {
-      try {
-        const response = await req('getPokemons');
-        setData(response);
-      } catch (error) {
-        setIsError(true);
-      } finally {
-        setIsloading(false);
-      }
-    };
-
-    getPokemons();
-  }, []);
-
-  return {
-    isLoading,
-    isError,
-    data,
-  };
-};
+interface IQuery {
+  name?: string;
+}
 
 const PokedexPage = () => {
-  const { isLoading, isError, data } = usePokemons();
+  const [searchValue, setSearchValue] = useState('');
+  const [query, setQuery] = useState<IQuery>({});
+  const debouncedValue = useDebounce(searchValue, 500);
+  
+  const {
+     isLoading,
+      isError,
+       data } = useData<IPokemons>('getPokemons', query,[debouncedValue]);
 
-  if (isLoading) return <div>Loading...</div>;
+  const handleSearchChahge = (e: React.ChangeEvent<HTMLInputElement>) => {
+   setSearchValue(e.target.value);
+   setQuery((state: IQuery) => ({
+     ...state,
+     name: e.target.value,
+   }))
+  }
+
+ 
   if (isError) return <div>Something wrong...</div>;
 
   return (
@@ -44,10 +39,13 @@ const PokedexPage = () => {
       <Layout>
         <div className={s.wrapper}>
           <Heading type="h3">
-            {data.total} <b>Pokemons</b> for you to choose your favorite
+            {!isLoading  && data && data.total} <b>Pokemons</b> for you to choose your favorite
           </Heading>
+          <div className={s.inputStyle}>
+            <input type="text" value={searchValue} onChange={handleSearchChahge}/>
+          </div>
           <div className={s.pokemonsGrid}>
-            {data.pokemons.map((pokemon: any) => {
+            {!isLoading && data &&data.pokemons.map((pokemon: any) => {
               const { id, name, stats, types, img } = pokemon;
               return (
                 <PokemonCard

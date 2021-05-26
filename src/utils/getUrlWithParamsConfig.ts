@@ -1,11 +1,14 @@
-import config from '../config/index';
+import config from '../config';
 
-type TEndpoint = keyof typeof config.client.endpoint;
 
-const getUrlWithParamsConfig = (endpointConfig: TEndpoint) => {
+
+const getUrlWithParamsConfig = (endpointConfig: string, query: object) => {
   const url = {
     ...config.client.server,
     ...config.client.endpoint[endpointConfig].uri,
+    query:{
+      ...query,
+    }
   };
 
   return url;
