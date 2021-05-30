@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from 'react';
 import HomePage from './pages/Home';
 import EmptyPage from './pages/EmptyPage';
 import PokedexPage from './pages/Pokedex';
-import Pokemon, { PokemonProps } from './pages/Pokemon';
+import Pokemon, { IPokemonProps } from './pages/Pokemon';
 
 interface IGenerelMenu {
   title: string;
@@ -15,7 +15,7 @@ export enum LinkEnum {
   POKEDEX = '/pokedex',
   LEGENDARIES = '/legendaries',
   DOCUMENTATION = '/documentation',
-  POKEMON = '/pokedex/:id'
+  POKEMON = '/pokemon/:id'
 }
 
 export const GENERAL_MENU: IGenerelMenu[] = [
@@ -41,11 +41,13 @@ export const GENERAL_MENU: IGenerelMenu[] = [
   },
 ];
 
-const SECOND_ROUTES: IGenerelMenu[] = [{
-  title: 'Pokemon',
-  link: LinkEnum.POKEMON,
-  component: ({id}: PokemonProps) => <Pokemon id ={id} />
-}];
+const SECOND_ROUTES: IGenerelMenu[] = [
+  {
+    title: 'Pokemon',
+    link: LinkEnum.POKEMON,
+    component: ({id}: IPokemonProps) => <Pokemon id ={id} />
+  },
+];
 
 interface IAccMenu {
   [n: string]: (props: PropsWithChildren<any>) => JSX.Element;

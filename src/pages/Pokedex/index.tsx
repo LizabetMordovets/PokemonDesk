@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {A} from 'hookrouter';
 
 import Heading from '../../components/Heading';
 import Layout from '../../components/Layout';
@@ -8,6 +9,7 @@ import req from '../../utils/request';
 import s from './Pokedex.module.scss';
 import {IPokemons} from '../../interface/pokemons';
 import useDebounce from '../../hook/useDebounce';
+
 
 interface IQuery {
   name?: string;
@@ -45,17 +47,19 @@ const PokedexPage = () => {
             <input type="text" value={searchValue} onChange={handleSearchChahge}/>
           </div>
           <div className={s.pokemonsGrid}>
-            {!isLoading && data &&data.pokemons.map((pokemon: any) => {
+            {!isLoading && data && data.pokemons.map((pokemon: any) => {
               const { id, name, stats, types, img } = pokemon;
               return (
-                <PokemonCard
-                  key={id}
-                  name={name}
-                  attack={stats.attack}
-                  defense={stats.defense}
-                  img={img}
-                  types={types}
-                />
+                <A key={id} href={`/pokemon/${id}`}>
+                  <PokemonCard
+                    key={id}
+                    name={name}
+                    attack={stats.attack}
+                    defense={stats.defense}
+                    img={img}
+                    types={types}
+                  />
+                </A>
               );
             })}
           </div>
