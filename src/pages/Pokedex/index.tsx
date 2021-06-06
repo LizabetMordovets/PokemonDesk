@@ -5,10 +5,10 @@ import Heading from '../../components/Heading';
 import Layout from '../../components/Layout';
 import PokemonCard from '../../components/PokemonCard';
 import useData from '../../hook/getData';
-import req from '../../utils/request';
 import s from './Pokedex.module.scss';
 import {IPokemons} from '../../interface/pokemons';
 import useDebounce from '../../hook/useDebounce';
+import {LinkEnum} from '../../routes';
 
 
 interface IQuery {
@@ -50,7 +50,7 @@ const PokedexPage = () => {
             {!isLoading && data && data.pokemons.map((pokemon: any) => {
               const { id, name, stats, types, img } = pokemon;
               return (
-                <A key={id} href={`/pokemon/${id}`}>
+                <A key={id} href={`${LinkEnum.POKEMON}/${id}`}>
                   <PokemonCard
                     key={id}
                     name={name}
@@ -60,6 +60,7 @@ const PokedexPage = () => {
                     types={types}
                   />
                 </A>
+                
               );
             })}
           </div>
