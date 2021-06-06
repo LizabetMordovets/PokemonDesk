@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {A} from 'hookrouter';
 
 import Heading from '../../components/Heading';
@@ -19,6 +20,23 @@ const PokedexPage = () => {
   const [searchValue, setSearchValue] = useState('');
   const [query, setQuery] = useState<IQuery>({});
   const debouncedValue = useDebounce(searchValue, 500);
+
+
+  const dispatch = useDispatch();
+  const PokemonTypes = useSelector(getPokemonTypes);
+  const IsTypesLoading = useSelector(getPokemonTypesLoading);
+
+  useEffect(() => {
+    dispatch(getTypesAction());
+}, []);
+
+if (isLoading) {
+    return <Loader />;
+}
+
+if (isError) {
+    return <Error />;
+}
   
   const {
      isLoading,
